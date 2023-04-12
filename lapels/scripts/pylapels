@@ -1,4 +1,4 @@
-#! /bin/env python
+#!/project/6002165/clarkb/clark_lapels/env/bin/python
 '''
 Created on Oct 30, 2013
 
@@ -190,8 +190,12 @@ def annotate(bam_fn, mod_fn, mergePool, chrom, lock=None):
         if lock:
             lock.release()
         sorted_fn = "%s.%s.sorted.bam" % (args.bamout_fn, chrom)
-        pysam.sort('-n', unsorted_fn.encode("utf-8"),
-                   sorted_fn[:-4].encode("utf-8"))
+
+	#print(unsorted_fn)
+	#print(sorted_fn[:-4])
+        pysam.sort('-n', unsorted_fn, '-o',  sorted_fn)
+       # pysam.sort('-n', unsorted_fn.encode("utf-8"),
+       #            sorted_fn[:-4].encode("utf-8"))
         mergePool.append(sorted_fn)
 
     os.remove(unsorted_fn)
@@ -352,9 +356,9 @@ def run():
             in_name = args.bamout_fn + '.merged.bam'
 
         in_name = in_name.encode("utf-8")
-        out_name = args.bamout_fn[:-4]
+        out_name = args.bamout_fn
         out_name = out_name.encode("utf-8")
-        pysam.sort(in_name, out_name)
+        pysam.sort(in_name,"-o", out_name)
         if not args.keepTemp:
             if not args.noFixMate:
                 os.remove(args.bamout_fn + '.matefixed.bam')
